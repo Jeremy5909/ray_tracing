@@ -8,8 +8,8 @@ mod vec3;
 mod color;
 mod ray;
 
-fn hit_sphere(center: &Point3, radius: f32, r: &Ray) -> bool {
-    let oc = *center - *r.origin();
+fn hit_sphere(center: Point3, radius: f32, r: &Ray) -> bool {
+    let oc = center - *r.origin();
     let a = dot(*r.dir(), *r.dir());
     let b = -2.0 * dot(*r.dir(), oc);
     let c = dot(oc, oc) - radius*radius;
@@ -18,7 +18,7 @@ fn hit_sphere(center: &Point3, radius: f32, r: &Ray) -> bool {
 }
 
 fn ray_color(r: &Ray) -> Color {
-    if hit_sphere(&Point3::from(0.0,0.0,-1.0), 0.5, r){
+    if hit_sphere(Point3::from(0.0,0.0,-1.0), 0.5, r){
         return Color::from(1.0, 0.0, 0.0)
     }
 

@@ -1,4 +1,4 @@
-use std::{fmt::Display, ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, SubAssign}};
+use std::{fmt::Display, ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Sub, SubAssign}};
 
 #[derive(Clone, Copy)]
 pub struct Vec3 {
@@ -39,7 +39,7 @@ impl Neg for Vec3 {
 	type Output = Vec3;
 
 	fn neg(self) -> Self::Output {
-		Vec3 {e: [-self.e[0],-self.e[1],-self.e[2]]}
+		Vec3::from(-self.e[0],-self.e[1],-self.e[2])
 	}
 }
 impl Index<usize> for Vec3 {
@@ -58,7 +58,14 @@ impl Add<Vec3> for Vec3 {
 	type Output = Vec3;
 
 	fn add(self, rhs: Self) -> Self::Output {
-		Vec3 {e: [self.e[0] + rhs.e[0], self.e[1] + rhs.e[1], self.e[2] + rhs.e[2]]}
+		Vec3::from(self.e[0] + rhs.e[0], self.e[1] + rhs.e[1], self.e[2] + rhs.e[2])
+	}
+}
+impl Sub<Vec3> for Vec3 {
+	type Output = Vec3;
+
+	fn sub(self, rhs: Vec3) -> Self::Output {
+		Vec3::from(self.e[0] - rhs.e[0], self.e[1] - rhs.e[1], self.e[2] - rhs.e[2])
 	}
 }
 impl AddAssign<Vec3> for Vec3 {
@@ -72,21 +79,21 @@ impl Mul<Vec3> for Vec3 {
 	type Output = Vec3;
 
 	fn mul(self, rhs: Self) -> Self::Output {
-		Vec3 {e: [self.e[0] * rhs.e[0], self.e[1] * rhs.e[1], self.e[2] * rhs.e[2]]}
+		Vec3::from(self.e[0] * rhs.e[0], self.e[1] * rhs.e[1], self.e[2] * rhs.e[2])
 	}
 }
 impl Mul<f32> for Vec3 {
 	type Output = Vec3;
 
 	fn mul(self, rhs: f32) -> Self::Output {
-		Vec3 {e: [self.e[0] * rhs, self.e[1] * rhs, self.e[2] * rhs]}
+		Vec3::from(self.e[0] * rhs, self.e[1] * rhs, self.e[2] * rhs)
 	}
 }
 impl Mul<Vec3> for f32 {
 	type Output = Vec3;
 
 	fn mul(self, rhs: Vec3) -> Self::Output {
-		Vec3{e: [self * rhs.e[0], self * rhs.e[1], self * rhs.e[2]]}
+		Vec3::from(self * rhs.e[0], self * rhs.e[1], self * rhs.e[2])
 	}
 }
 impl MulAssign<Vec3> for Vec3 {
@@ -107,7 +114,7 @@ impl Div<Vec3> for Vec3 {
 	type Output = Vec3;
 
 	fn div(self, rhs: Self) -> Self::Output {
-		Vec3 {e: [self.e[0] + rhs.e[0], self.e[1] + rhs.e[1], self.e[2] + rhs.e[2]]}
+		Vec3::from(self.e[0] + rhs.e[0], self.e[1] + rhs.e[1], self.e[2] + rhs.e[2])
 	}
 }
 impl Div<f32> for Vec3 {

@@ -35,6 +35,7 @@ impl Camera {
     eprintln!("Done");
 	}
 	fn initialize(&mut self) {
+		//BUG when proportion != 1.0
 		self.image_height = (self.image_width as f32/self.aspect_ratio) as i32;
 		self.image_height = if self.image_height < 1 {1} else {self.image_height};
 

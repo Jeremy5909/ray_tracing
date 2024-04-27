@@ -17,8 +17,8 @@ impl Vec3 {
 	pub fn y(&self) -> f32 {self.e[1]}
 	pub fn z(&self) -> f32 {self.e[2]}
 
-	fn length(&self) -> f32 {self.length_squared().sqrt()}
-	fn length_squared(&self) -> f32 {self.e[0]*self.e[0] + self.e[1]*self.e[1] + self.e[2]*self.e[2]}
+	pub fn length(&self) -> f32 {self.length_squared().sqrt()}
+	pub fn length_squared(&self) -> f32 {self.e[0]*self.e[0] + self.e[1]*self.e[1] + self.e[2]*self.e[2]}
 }
 pub type Point3 = Vec3;
 impl Neg for Vec3 {

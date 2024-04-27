@@ -2,6 +2,7 @@ use std::{f32::INFINITY, io::{stdout, Write}};
 
 use crate::{color::{write_color, Color}, hittable::{self, HitRecord, Hittable}, interval::Interval, ray::Ray, vec3::{unit_vector, Point3, Vec3}};
 
+#[derive(Default)]
 pub struct Camera {
 	pub aspect_ratio: f32,
 	pub image_width: i32,
@@ -13,14 +14,7 @@ pub struct Camera {
 }
 impl Camera {
 	pub fn new(aspect_ratio: f32, image_width: i32) -> Self {
-		Self {
-			aspect_ratio,
-			image_width,
-			image_height: 0,
-			center: Point3::new(),
-			pixel00_loc: Point3::new(),
-			pixel_delta_u: Vec3::new(),
-			pixel_delta_v: Vec3::new()}
+		Self {aspect_ratio, image_width, ..Default::default()}
 	}
 	pub fn render(&mut self, world: &dyn Hittable) {
 		self.initialize();

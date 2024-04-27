@@ -19,20 +19,6 @@ impl Vec3 {
 
 	fn length(&self) -> f32 {self.length_squared().sqrt()}
 	fn length_squared(&self) -> f32 {self.e[0]*self.e[0] + self.e[1]*self.e[1] + self.e[2]*self.e[2]}
-
-	fn dot(&self, other: Vec3) -> f32 {
-		self.e[0] * other.e[0] + 
-		self.e[1] * other.e[1] +
-		self.e[2] * other.e[2]
-	}
-	
-	fn cross(&self, other: Vec3) -> Vec3 {
-		Vec3::from(
-			self.e[1]*other.e[2] - self.e[2]*other.e[1],
-			self.e[2]*other.e[0] - self.e[0]*other.e[2],
-			self.e[0]*other.e[1] - self.e[1]*other.e[0]
-		)
-	}
 }
 pub type Point3 = Vec3;
 impl Neg for Vec3 {
@@ -133,4 +119,21 @@ impl Display for Vec3 {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		write!(f, "{} {} {}", self.e[0], self.e[1], self.e[2])
 	}
+}
+
+pub fn unit_vector(v: &Vec3) -> Vec3 {
+	*v / v.length()
+}
+pub fn dot(first: Vec3, other: Vec3) -> f32 {
+	first.e[0] * other.e[0] + 
+	first.e[1] * other.e[1] +
+	first.e[2] * other.e[2]
+}
+
+pub fn cross(first: Vec3, other: Vec3) -> Vec3 {
+	Vec3::from(
+		first.e[1]*other.e[2] - first.e[2]*other.e[1],
+		first.e[2]*other.e[0] - first.e[0]*other.e[2],
+		first.e[0]*other.e[1] - first.e[1]*other.e[0]
+	)
 }

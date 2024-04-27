@@ -1,6 +1,7 @@
 use std::{f32::INFINITY, io::{stdout, Write}};
 
 use hittable::{HitRecord, Hittable};
+use interval::Interval;
 use vec3::{dot, unit_vector};
 
 use crate::{color::{write_color, Color}, hittable_list::HittableList, ray::Ray, sphere::Sphere, vec3::{Point3, Vec3}};
@@ -11,10 +12,11 @@ mod ray;
 mod hittable;
 mod sphere;
 mod hittable_list;
+mod interval;
 
 fn ray_color(r: &Ray, world: &dyn Hittable) -> Color {
     let mut rec: HitRecord = HitRecord::new();
-    if world.hit(r, 0.0, INFINITY, &mut rec) {
+    if world.hit(r, Interval::from(0.0, INFINITY), &mut rec) {
         return 0.5 * (rec.normal + Color::from(1.0, 1.0, 1.0));
     }
     let unit_direction = unit_vector(r.dir());

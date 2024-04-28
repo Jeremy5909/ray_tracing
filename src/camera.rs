@@ -65,7 +65,7 @@ impl Camera {
 			return Color::new();
 		}
 		let mut rec = HitRecord::new();
-		if world.hit(r, Interval::from(0.0, INFINITY), &mut rec) {
+		if world.hit(r, Interval::from(0.001, INFINITY), &mut rec) {
 			return 0.5 * Self::ray_color(&Ray::new(rec.p, random_on_hemisphere(rec.normal)), depth-1, world);
 		}
 		let unit_direction = unit_vector(r.dir());

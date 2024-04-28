@@ -39,7 +39,6 @@ impl Camera {
     eprintln!("\rDone.                 \n");
 	}
 	fn initialize(&mut self) {
-		// Fix image stretcheness
 		self.image_height = (self.image_width as f32/self.aspect_ratio) as i32;
 		self.image_height = if self.image_height < 1 {1} else {self.image_height};
 
@@ -48,7 +47,7 @@ impl Camera {
 		self.center = Point3::from(0.0, 0.0, 0.0);
 		let focal_length = 1.0f32;
 		let viewport_height = 2.0f32;
-		let viewport_width = viewport_height * ((self.image_width/self.image_height) as f32);
+		let viewport_width = viewport_height * (self.image_width as f32/self.image_height as f32);
 
 		let viewport_u = Vec3::from(viewport_width, 0.0, 0.0);
 		let viewport_v = Vec3::from(0.0, -viewport_height, 0.0);

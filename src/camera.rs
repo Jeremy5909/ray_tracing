@@ -27,7 +27,7 @@ impl Camera {
 		println!("P3\n{} {}\n255", self.image_width, self.image_height);
     	for j in 0..=self.image_height {
         	eprint!("\rScanlines remaining: {} ", self.image_height-j);
-        	for i in 0..self.image_height {
+        	for i in 0..self.image_width {
             	let mut pixel_color = Color::new();
 				for _ in 0..self.sample_per_pixel {
 					let r = self.get_ray(i, j);
@@ -39,7 +39,7 @@ impl Camera {
     eprintln!("\rDone.                 \n");
 	}
 	fn initialize(&mut self) {
-		//BUG when proportion != 1.0
+		// Fix image stretcheness
 		self.image_height = (self.image_width as f32/self.aspect_ratio) as i32;
 		self.image_height = if self.image_height < 1 {1} else {self.image_height};
 

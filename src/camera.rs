@@ -2,7 +2,7 @@ use std::{f32::INFINITY, io::stdout};
 
 use rand::{thread_rng, Rng};
 
-use crate::{color::{write_color, Color}, hittable::{HitRecord, Hittable}, interval::Interval, ray::Ray, vec3::{random_on_hemisphere, unit_vector, Point3, Vec3}};
+use crate::{color::{write_color, Color}, hittable::{HitRecord, Hittable}, interval::Interval, ray::Ray, vec3::{random_unit_vector, unit_vector, Point3, Vec3}};
 
 #[derive(Default)]
 pub struct Camera {
@@ -66,7 +66,8 @@ impl Camera {
 		}
 		let mut rec = HitRecord::new();
 		if world.hit(r, Interval::from(0.001, INFINITY), &mut rec) {
-			return 0.5 * Self::ray_color(&Ray::new(rec.p, random_on_hemisphere(rec.normal)), depth-1, world);
+			let direction = rec.normal + random_unit_vector();
+			return 0.5 * Self::ray_color(&Ray::new(rec.p, direction), depth-1, world);
 		}
 		let unit_direction = unit_vector(r.dir());
     	let a = 0.5*(unit_direction.y() + 1.0);

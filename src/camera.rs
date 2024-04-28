@@ -14,12 +14,14 @@ pub struct Camera {
 	pixel_delta_u: Vec3,
 	pixel_delta_v: Vec3,
 
-	pub sample_per_pixel: i32,
+	pub samples_per_pixel: i32,
 	pixel_samples_scale: f32,
+
+	pub max_depth: i32,
 }
 impl Camera {
 	pub fn new(aspect_ratio: f32, image_width: i32) -> Self {
-		Self {aspect_ratio, image_width,sample_per_pixel: 10, ..Default::default()}
+		Self {aspect_ratio, image_width,samples_per_pixel: 10, ..Default::default()}
 	}
 	pub fn render(&mut self, world: &dyn Hittable) {
 		self.initialize();
@@ -29,9 +31,9 @@ impl Camera {
         	eprint!("\rScanlines remaining: {} ", self.image_height-j);
         	for i in 0..self.image_width {
             	let mut pixel_color = Color::new();
-				for _ in 0..self.sample_per_pixel {
+				for _ in 0..self.samples_per_pixel {
 					let r = self.get_ray(i, j);
-					pixel_color += self.ray_color(&r, world);
+					pixel_color += Self::ray_color(&r, self.max_depth, world);
 				}
             	write_color(&mut stdout(), self.pixel_samples_scale * pixel_color);
         }
@@ -42,7 +44,7 @@ impl Camera {
 		self.image_height = (self.image_width as f32/self.aspect_ratio) as i32;
 		self.image_height = if self.image_height < 1 {1} else {self.image_height};
 
-		self.pixel_samples_scale = 1.0 / self.sample_per_pixel as f32;
+		self.pixel_samples_scale = 1.0 / self.samples_per_pixel as f32;
 
 		self.center = Point3::from(0.0, 0.0, 0.0);
 		let focal_length = 1.0f32;
@@ -58,10 +60,13 @@ impl Camera {
 		let viewport_upper_left = self.center - Vec3::from(0.0, 0.0, focal_length) - viewport_u/2.0 - viewport_v/2.0;
 		self.pixel00_loc = viewport_upper_left + 0.5 * (self.pixel_delta_u + self.pixel_delta_v);
 	}
-	fn ray_color(&mut self, r: &Ray, world: &dyn Hittable) -> Color {
+	fn ray_color(r: &Ray, depth: i32, world: &dyn Hittable) -> Color {
+		if depth <= 0 {
+			return Color::new();
+		}
 		let mut rec = HitRecord::new();
 		if world.hit(r, Interval::from(0.0, INFINITY), &mut rec) {
-			return 0.5 * self.ray_color(&Ray::new(rec.p, random_on_hemisphere(rec.normal)), world);
+			return 0.5 * Self::ray_color(&Ray::new(rec.p, random_on_hemisphere(rec.normal)), depth-1, world);
 		}
 		let unit_direction = unit_vector(r.dir());
     	let a = 0.5*(unit_direction.y() + 1.0);

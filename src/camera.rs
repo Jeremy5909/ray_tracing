@@ -2,7 +2,7 @@ use std::{f32::INFINITY, io::stdout};
 
 use rand::{thread_rng, Rng};
 
-use crate::{color::{write_color, Color}, hittable::{HitRecord, Hittable}, interval::Interval, ray::Ray, vec3::{unit_vector, Point3, Vec3}};
+use crate::{color::{write_color, Color}, hittable::{HitRecord, Hittable}, interval::Interval, ray::Ray, vec3::{random_on_hemisphere, unit_vector, Point3, Vec3}};
 
 #[derive(Default)]
 pub struct Camera {
@@ -31,7 +31,7 @@ impl Camera {
             	let mut pixel_color = Color::new();
 				for _ in 0..self.sample_per_pixel {
 					let r = self.get_ray(i, j);
-					pixel_color += Self::ray_color(&r, world);
+					pixel_color += self.ray_color(&r, world);
 				}
             	write_color(&mut stdout(), self.pixel_samples_scale * pixel_color);
         }
@@ -59,10 +59,10 @@ impl Camera {
 		let viewport_upper_left = self.center - Vec3::from(0.0, 0.0, focal_length) - viewport_u/2.0 - viewport_v/2.0;
 		self.pixel00_loc = viewport_upper_left + 0.5 * (self.pixel_delta_u + self.pixel_delta_v);
 	}
-	fn ray_color(r: &Ray, world: &dyn Hittable) -> Color {
+	fn ray_color(&mut self, r: &Ray, world: &dyn Hittable) -> Color {
 		let mut rec = HitRecord::new();
 		if world.hit(r, Interval::from(0.0, INFINITY), &mut rec) {
-			return 0.5 * (rec.normal + Color::from(1.0, 1.0, 1.0));
+			return 0.5 * self.ray_color(&Ray::new(rec.p, random_on_hemisphere(rec.normal)), world);
 		}
 		let unit_direction = unit_vector(r.dir());
     	let a = 0.5*(unit_direction.y() + 1.0);

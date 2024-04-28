@@ -1,4 +1,6 @@
-use std::{fmt::Display, ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Sub}};
+use std::{fmt::Display, ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, Range, RangeBounds, Sub}};
+
+use rand::{distributions::uniform::SampleRange, random, thread_rng, Rng};
 
 #[derive(Clone, Copy, Default)]
 pub struct Vec3 {
@@ -19,6 +21,12 @@ impl Vec3 {
 
 	pub fn length(&self) -> f32 {self.length_squared().sqrt()}
 	pub fn length_squared(&self) -> f32 {self.e[0]*self.e[0] + self.e[1]*self.e[1] + self.e[2]*self.e[2]}
+
+	pub fn random() -> Self {Vec3::from(random(), random(), random())}
+	pub fn random_range<T: RangeBounds<f32> + Clone + SampleRange<f32>>(range: T) -> Self {
+		let mut random = thread_rng();
+		Vec3::from(random.gen_range(range.clone()), random.gen_range(range.clone()), random.gen_range(range.clone()))
+	}
 }
 pub type Point3 = Vec3;
 impl Neg for Vec3 {
@@ -129,11 +137,32 @@ pub fn dot(first: Vec3, other: Vec3) -> f32 {
 	first.e[1] * other.e[1] +
 	first.e[2] * other.e[2]
 }
-
 pub fn cross(first: Vec3, other: Vec3) -> Vec3 {
 	Vec3::from(
 		first.e[1]*other.e[2] - first.e[2]*other.e[1],
 		first.e[2]*other.e[0] - first.e[0]*other.e[2],
 		first.e[0]*other.e[1] - first.e[1]*other.e[0]
 	)
+}
+pub fn random_in_unit_sphere() -> Vec3 {
+	loop {
+		let p = Vec3::random_range(-1.0..1.0);
+		if p.length_squared() < 1.0 {
+			return p;
+		}
+	}
+}
+
+// Consider using lifetime
+pub fn random_unit_vector() -> Vec3 {
+	unit_vector(&random_in_unit_sphere())
+}
+
+pub fn random_on_hemisphere(normal: Vec3) -> Vec3 {
+	let on_unit_sphere = random_unit_vector();
+	if dot(on_unit_sphere, normal) > 0.0 {
+		on_unit_sphere
+	} else {
+		-on_unit_sphere
+	}
 }

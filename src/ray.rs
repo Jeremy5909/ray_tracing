@@ -8,7 +8,7 @@ impl Ray {
 	pub fn new(origin: Point3, dir: Vec3) -> Self {
 		Ray {origin, dir}
 	}
-	pub fn at(&self, t: f32) -> Point3 {
+	pub fn at(&self, t: f64) -> Point3 {
 		self.origin + t*self.dir
 	}
 	pub fn origin(&self) -> &Point3 {

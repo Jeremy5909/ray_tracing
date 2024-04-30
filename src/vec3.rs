@@ -4,26 +4,26 @@ use rand::{distributions::uniform::SampleRange, random, thread_rng, Rng};
 
 #[derive(Clone, Copy, Default)]
 pub struct Vec3 {
-	pub e: [f32; 3]
+	pub e: [f64; 3]
 }
 impl Vec3 {
 	pub fn new() -> Self {
 		Self{e: [0.0,0.0,0.0]}
 	}
 
-	pub fn from(e0: f32, e1: f32, e2: f32) -> Self {
+	pub fn from(e0: f64, e1: f64, e2: f64) -> Self {
 		Self{e: [e0, e1, e2]}
 	}
 
-	pub fn x(&self) -> f32 {self.e[0]}
-	pub fn y(&self) -> f32 {self.e[1]}
-	pub fn z(&self) -> f32 {self.e[2]}
+	pub fn x(&self) -> f64 {self.e[0]}
+	pub fn y(&self) -> f64 {self.e[1]}
+	pub fn z(&self) -> f64 {self.e[2]}
 
-	pub fn length(&self) -> f32 {self.length_squared().sqrt()}
-	pub fn length_squared(&self) -> f32 {self.e[0]*self.e[0] + self.e[1]*self.e[1] + self.e[2]*self.e[2]}
+	pub fn length(&self) -> f64 {self.length_squared().sqrt()}
+	pub fn length_squared(&self) -> f64 {self.e[0]*self.e[0] + self.e[1]*self.e[1] + self.e[2]*self.e[2]}
 
 	pub fn random() -> Self {Vec3::from(random(), random(), random())}
-	pub fn random_range<T: RangeBounds<f32> + Clone + SampleRange<f32>>(range: T) -> Self {
+	pub fn random_range<T: RangeBounds<f64> + Clone + SampleRange<f64>>(range: T) -> Self {
 		let mut random = thread_rng();
 		Vec3::from(random.gen_range(range.clone()), random.gen_range(range.clone()), random.gen_range(range.clone()))
 	}
@@ -37,7 +37,7 @@ impl Neg for Vec3 {
 	}
 }
 impl Index<usize> for Vec3 {
-	type Output = f32;
+	type Output = f64;
 
 	fn index(&self, index: usize) -> &Self::Output {
 		&self.e[index]
@@ -76,14 +76,14 @@ impl Mul<Vec3> for Vec3 {
 		Vec3::from(self.e[0] * rhs.e[0], self.e[1] * rhs.e[1], self.e[2] * rhs.e[2])
 	}
 }
-impl Mul<f32> for Vec3 {
+impl Mul<f64> for Vec3 {
 	type Output = Vec3;
 
-	fn mul(self, rhs: f32) -> Self::Output {
+	fn mul(self, rhs: f64) -> Self::Output {
 		Vec3::from(self.e[0] * rhs, self.e[1] * rhs, self.e[2] * rhs)
 	}
 }
-impl Mul<Vec3> for f32 {
+impl Mul<Vec3> for f64 {
 	type Output = Vec3;
 
 	fn mul(self, rhs: Vec3) -> Self::Output {
@@ -97,8 +97,8 @@ impl MulAssign<Vec3> for Vec3 {
 		self.e[2] *= rhs.e[2];
 	}
 }
-impl MulAssign<f32> for Vec3 {
-	fn mul_assign(&mut self, rhs: f32) {
+impl MulAssign<f64> for Vec3 {
+	fn mul_assign(&mut self, rhs: f64) {
 		self.e[0] *= rhs;
 		self.e[1] *= rhs;
 		self.e[2] *= rhs;
@@ -111,15 +111,15 @@ impl Div<Vec3> for Vec3 {
 		Vec3::from(self.e[0] + rhs.e[0], self.e[1] + rhs.e[1], self.e[2] + rhs.e[2])
 	}
 }
-impl Div<f32> for Vec3 {
+impl Div<f64> for Vec3 {
 	type Output = Vec3;
 
-	fn div(self, rhs: f32) -> Self::Output {
+	fn div(self, rhs: f64) -> Self::Output {
 		1.0/rhs * self
 	}
 }
-impl DivAssign<f32> for Vec3 {
-	fn div_assign(&mut self, rhs: f32) {
+impl DivAssign<f64> for Vec3 {
+	fn div_assign(&mut self, rhs: f64) {
 		*self *= 1.0/rhs
 	}
 }
@@ -132,7 +132,7 @@ impl Display for Vec3 {
 pub fn unit_vector(v: &Vec3) -> Vec3 {
 	*v / v.length()
 }
-pub fn dot(first: Vec3, other: Vec3) -> f32 {
+pub fn dot(first: Vec3, other: Vec3) -> f64 {
 	first.e[0] * other.e[0] + 
 	first.e[1] * other.e[1] +
 	first.e[2] * other.e[2]

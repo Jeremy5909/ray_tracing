@@ -19,7 +19,7 @@ pub fn write_color(out: &mut Stdout, pixel_color: Color) {
 	let bbyte = (256.0 * intensity.clamp(b)) as i32;
 	out.write_all(format!("{rbyte} {gbyte} {bbyte}\n").as_bytes()).unwrap();
 }
-pub fn linear_to_gamma(linear_component: f32) -> f32 {
+pub fn linear_to_gamma(linear_component: f64) -> f64 {
 	if linear_component > 0.0 {
 		return linear_component.sqrt()
 	}

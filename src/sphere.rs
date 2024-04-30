@@ -2,10 +2,10 @@ use crate::{hittable::{HitRecord, Hittable}, interval::Interval, vec3::{dot, Poi
 
 pub struct Sphere {
 	center: Point3,
-	radius: f32
+	radius: f64
 }
 impl Sphere {
-	pub fn new(center: Point3, radius: f32) -> Self {
+	pub fn new(center: Point3, radius: f64) -> Self {
 		Sphere {center, radius}
 	}
 }

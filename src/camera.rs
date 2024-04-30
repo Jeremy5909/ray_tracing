@@ -66,8 +66,13 @@ impl Camera {
 		}
 		let mut rec = HitRecord::new();
 		if world.hit(r, Interval::from(0.001, INFINITY), &mut rec) {
-			let direction = rec.normal + random_unit_vector();
-			return 0.5 * Self::ray_color(&Ray::new(rec.p, direction), depth-1, world);
+			let mut scattered = Ray::default();
+			let mut attenuation = Color::default();
+			if rec.mat.scatter(r, &rec, &mut attenuation, &mut scattered) {
+				return attenuation * Self::ray_color(&scattered, depth-1, world);
+			}
+			return Color::default();
+
 		}
 		let unit_direction = unit_vector(r.dir());
     	let a = 0.5*(unit_direction.y() + 1.0);

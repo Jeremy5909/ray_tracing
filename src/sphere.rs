@@ -1,15 +1,16 @@
-use crate::{hittable::{HitRecord, Hittable}, interval::Interval, vec3::{dot, Point3}};
+use crate::{hittable::{HitRecord, Hittable}, interval::Interval, material::Material, vec3::{dot, Point3}};
 
-pub struct Sphere {
+pub struct Sphere<'a> {
 	center: Point3,
-	radius: f64
+	radius: f64,
+	mat: &'a dyn Material
 }
-impl Sphere {
-	pub fn new(center: Point3, radius: f64) -> Self {
-		Sphere {center, radius}
+impl<'a> Sphere<'a> {
+	pub fn new(center: Point3, radius: f64, mat: &'a dyn Material) -> Self {
+		Sphere {center, radius, mat}
 	}
 }
-impl Hittable for Sphere {
+impl Hittable for Sphere<'_> {
 	fn hit(&self, r: &crate::ray::Ray, ray_t: Interval, rec: &mut HitRecord) -> bool {
 		let oc = self.center - *r.origin();
 		let a = r.dir().length_squared();

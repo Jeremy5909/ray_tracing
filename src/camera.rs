@@ -2,7 +2,7 @@ use std::{f64::INFINITY, io::stdout};
 
 use rand::{thread_rng, Rng};
 
-use crate::{color::{write_color, Color}, hittable::{HitRecord, Hittable}, interval::Interval, ray::Ray, vec3::{unit_vector, Point3, Vec3}};
+use crate::{color::{write_color, Color}, hittable::{HitRecord, Hittable}, interval::Interval, ray::Ray, vec3::{cross, unit_vector, Point3, Vec3}};
 #[derive(Default)]
 pub struct Camera {
 	pub aspect_ratio: f64,
@@ -19,10 +19,26 @@ pub struct Camera {
 	pub max_depth: i32,
 
 	pub fov: f64,
+
+	pub look_from: Point3,
+	pub look_at: Point3,
+	// Relative up
+	pub vup: Vec3,
+	// Camera frame basis vector
+	u: Vec3,
+	v: Vec3,
+	w: Vec3,
 }
 impl Camera {
 	pub fn new(aspect_ratio: f64, image_width: i32) -> Self {
-		Self {aspect_ratio, image_width,samples_per_pixel: 10, fov: 90.0, ..Default::default()}
+		Self {
+			aspect_ratio,
+			image_width,
+			samples_per_pixel: 10,
+			fov: 90.0,
+			look_at: Point3::new(0.0, 0.0, -1.0),
+			vup: Vec3::new(0.0, 1.0, 0.0),
+			..Default::default()}
 	}
 	pub fn render(&mut self, world: &dyn Hittable) {
 		self.initialize();
@@ -47,20 +63,24 @@ impl Camera {
 
 		self.pixel_samples_scale = 1.0 / self.samples_per_pixel as f64;
 
-		self.center = Point3::new(0.0, 0.0, 0.0);
-		let focal_length = 1.0;
+		self.center = self.look_from;
+		let focal_length = (self.look_from - self.look_at).length();
 		let theta = self.fov.to_radians();
 		let h = (theta/2.0).tan();		
 		let viewport_height = 2.0 * h * focal_length;
 		let viewport_width = viewport_height * (self.image_width as f64/self.image_height as f64);
 
-		let viewport_u = Vec3::new(viewport_width, 0.0, 0.0);
-		let viewport_v = Vec3::new(0.0, -viewport_height, 0.0);
+		self.w = unit_vector(&(self.look_from-self.look_at));
+		self.u = unit_vector(&cross(self.vup, self.w));
+		self.v = cross(self.w, self.u);
+
+		let viewport_u = viewport_width * self.u;
+		let viewport_v = viewport_height * -self.v;
 
 		self.pixel_delta_u = viewport_u / self.image_width as f64;
 		self.pixel_delta_v = viewport_v / self.image_height as f64;
 
-		let viewport_upper_left = self.center - Vec3::new(0.0, 0.0, focal_length) - viewport_u/2.0 - viewport_v/2.0;
+		let viewport_upper_left = self.center - (focal_length * self.w) - viewport_u/2.0 - viewport_v/2.0;
 		self.pixel00_loc = viewport_upper_left + 0.5 * (self.pixel_delta_u + self.pixel_delta_v);
 	}
 	fn ray_color(r: &Ray, depth: i32, world: &dyn Hittable) -> Color {

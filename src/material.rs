@@ -1,4 +1,4 @@
-use crate::{color::Color, hittable::HitRecord, ray::Ray, vec3::{random_unit_vector, reflect}};
+use crate::{color::Color, hittable::HitRecord, ray::Ray, vec3::{random_unit_vector, reflect, unit_vector}};
 
 pub trait Material {
 	fn scatter(&self, r_in: &Ray, rec: &HitRecord, attenuation: &mut Color, scattered: &mut Ray) -> bool;
@@ -26,10 +26,11 @@ impl Material for Lambertian {
 	}
 }
 
-pub struct Metal { pub albedo: Color }
+pub struct Metal { pub albedo: Color, pub fuzz: f64 }
 impl Material for Metal {
 	fn scatter(&self, r_in: &Ray, rec: &HitRecord, attenuation: &mut Color, scattered: &mut Ray) -> bool {
 		let reflected = reflect(r_in.dir(), &rec.normal);
+		let reflected = unit_vector(&reflected) + (self.fuzz * random_unit_vector());
 		*scattered = Ray::new(rec.p, reflected);
 		*attenuation = self.albedo;
 		true

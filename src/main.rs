@@ -17,8 +17,8 @@ mod material;
 fn main() {
     let ground = Lambertian {albedo: Color::new(0.8,0.8,0.0)};
     let center = Lambertian {albedo: Color::new(0.1, 0.2, 0.5)};
-    let left = Metal {albedo: Color::new(0.8, 0.8, 0.8)};
-    let right = Metal {albedo: Color::new(0.8, 0.6, 0.2)};
+    let left = Metal {albedo: Color::new(0.8, 0.8, 0.8), fuzz: 0.3};
+    let right = Metal {albedo: Color::new(0.8, 0.6, 0.2), fuzz: 1.0};
     
     let mut world = HittableList::new();
 

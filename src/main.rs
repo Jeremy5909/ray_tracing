@@ -27,10 +27,10 @@ fn main() {
     let left = Sphere::new(Point3::new(-1.0, 0.0, -1.0), 0.5, Box::new(left));
     let right = Sphere::new(Point3::new(1.0, 0.0, -1.0), 0.5, Box::new(right));
 
-    world.add(Box::new(ground));
-    world.add(Box::new(center));
-    world.add(Box::new(left));
-    world.add(Box::new(right));
+    world.add(&ground);
+    world.add(&center);
+    world.add(&left);
+    world.add(&right);
 
     let mut cam = Camera::new(16.0/9.0, 400);
     cam.samples_per_pixel = 100;

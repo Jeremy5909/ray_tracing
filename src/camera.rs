@@ -64,7 +64,7 @@ impl Camera {
 		if depth <= 0 {
 			return Color::default();
 		}
-		let mut rec = HitRecord::new();
+		let mut rec = HitRecord::default();
 		if world.hit(r, Interval::from(0.001, INFINITY), &mut rec) {
 			let mut scattered = Ray::default();
 			let mut attenuation = Color::default();

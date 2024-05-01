@@ -168,5 +168,5 @@ pub fn random_on_hemisphere(normal: Vec3) -> Vec3 {
 }
 
 pub fn reflect(v: &Vec3, n: &Vec3) -> Vec3 {
-	*v - 2 * dot(*n, *v) * *n
+	*v - 2.0 * dot(*n, *v) * *n
 }

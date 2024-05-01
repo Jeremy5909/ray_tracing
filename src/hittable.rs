@@ -1,14 +1,14 @@
 use crate::{interval::Interval, material::Material, ray::Ray, vec3::{dot, Point3, Vec3}};
 
-#[derive(Clone, Copy, Default)]
-pub struct HitRecord<'a> {
+#[derive(Clone, Default)]
+pub struct HitRecord {
 	pub p: Point3,
 	pub normal: Vec3,
-	pub mat: &'a dyn Material,
+	pub mat: Box<dyn Material>,
 	pub t: f64,
 	pub front_face: bool,
 }
-impl HitRecord<'_> {
+impl HitRecord {
 	// pub fn new() -> Self {
 	// 	HitRecord{
 	// 		p: Point3::new(0.0, 0.0, 0.0),

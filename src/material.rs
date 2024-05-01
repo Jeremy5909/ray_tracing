@@ -1,10 +1,9 @@
 use crate::{color::Color, hittable::HitRecord, ray::Ray, vec3::{random_unit_vector, reflect, Vec3}};
 
-pub trait Material: Default {
+pub trait Material: Clone + Default {
 	fn scatter(&self, r_in: &Ray, rec: &HitRecord, attenuation: &mut Color, scattered: &mut Ray) -> bool;
 }
-
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct Lambertian { albedo: Color }
 impl Material for Lambertian {
 	fn scatter(&self, r_in: &Ray, rec: &HitRecord, attenuation: &mut Color, scattered: &mut Ray) -> bool {
@@ -21,7 +20,7 @@ impl Material for Lambertian {
 	}
 }
 
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct Metal { albedo: Color }
 impl Material for Metal {
 	fn scatter(&self, r_in: &Ray, rec: &HitRecord, attenuation: &mut Color, scattered: &mut Ray) -> bool {

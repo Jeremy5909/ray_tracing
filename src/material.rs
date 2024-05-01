@@ -1,6 +1,4 @@
-use std::default;
-
-use crate::{color::Color, hittable::HitRecord, ray::Ray, vec3::{random_unit_vector, reflect, Vec3}};
+use crate::{color::Color, hittable::HitRecord, ray::Ray, vec3::{random_unit_vector, reflect}};
 
 #[derive(Clone, Copy, Default)]
 pub enum EMaterial {
@@ -26,7 +24,7 @@ pub trait Material {
 #[derive(Default, Clone, Copy)]
 pub struct Lambertian { pub albedo: Color }
 impl Material for Lambertian {
-	fn scatter(&self, r_in: &Ray, rec: &HitRecord, attenuation: &mut Color, scattered: &mut Ray) -> bool {
+	fn scatter(&self, _r_in: &Ray, rec: &HitRecord, attenuation: &mut Color, scattered: &mut Ray) -> bool {
 		let mut scatter_dir = rec.normal + random_unit_vector();
 
 		// Catch degenerate scatter direction
@@ -35,7 +33,7 @@ impl Material for Lambertian {
 		}
 
 		*scattered = Ray::new(rec.p, scatter_dir);
-		*attenuation = self.albedo.clone();
+		*attenuation = self.albedo;
 		true
 	}
 }

@@ -1,4 +1,4 @@
-use std::{fmt::Display, ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, RangeBounds, Sub}};
+use std::{cmp::min, fmt::Display, ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, RangeBounds, Sub}};
 use rand::{distributions::uniform::SampleRange, random, thread_rng, Rng};
 
 #[derive(Clone, Copy, Default)]
@@ -167,4 +167,11 @@ pub fn random_on_hemisphere(normal: Vec3) -> Vec3 {
 
 pub fn reflect(v: &Vec3, n: &Vec3) -> Vec3 {
 	*v - 2.0 * dot(*n, *v) * *n
+}
+
+pub fn refract(uv: &Vec3, n: &Vec3, etai_over_etat: f64) -> Vec3 {
+	let cos_theta = dot(- *uv, *n).min(1.0);
+	let r_out_perp = etai_over_etat * (*uv + cos_theta * *n);
+	let r_out_parallel = -(1.0 - r_out_perp.length_squared()).abs().sqrt() * *n;
+	r_out_parallel + r_out_perp
 }

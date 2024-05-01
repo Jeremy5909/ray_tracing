@@ -17,10 +17,12 @@ pub struct Camera {
 	pixel_samples_scale: f64,
 
 	pub max_depth: i32,
+
+	pub fov: f64,
 }
 impl Camera {
 	pub fn new(aspect_ratio: f64, image_width: i32) -> Self {
-		Self {aspect_ratio, image_width,samples_per_pixel: 10, ..Default::default()}
+		Self {aspect_ratio, image_width,samples_per_pixel: 10, fov: 90.0, ..Default::default()}
 	}
 	pub fn render(&mut self, world: &dyn Hittable) {
 		self.initialize();
@@ -47,7 +49,9 @@ impl Camera {
 
 		self.center = Point3::new(0.0, 0.0, 0.0);
 		let focal_length = 1.0;
-		let viewport_height = 2.0;
+		let theta = self.fov.to_radians();
+		let h = (theta/2.0).tan();		
+		let viewport_height = 2.0 * h * focal_length;
 		let viewport_width = viewport_height * (self.image_width as f64/self.image_height as f64);
 
 		let viewport_u = Vec3::new(viewport_width, 0.0, 0.0);

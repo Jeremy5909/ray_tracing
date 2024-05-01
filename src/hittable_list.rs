@@ -18,7 +18,7 @@ impl<'a> Hittable<'a> for HittableList<'a> {
 		let mut closest_so_far = ray_t.max;
 
 		for object in &self.objects {
-			if object.hit(r, Interval::from(ray_t.min, closest_so_far), &mut temp_rec) {
+			if object.hit(r, Interval::new(ray_t.min, closest_so_far), &mut temp_rec) {
 				hit_anything = true;
 				closest_so_far = temp_rec.clone().t;
 				*rec = temp_rec.clone();

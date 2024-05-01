@@ -3,7 +3,6 @@ use std::{f64::INFINITY, io::stdout};
 use rand::{thread_rng, Rng};
 
 use crate::{color::{write_color, Color}, hittable::{HitRecord, Hittable}, interval::Interval, ray::Ray, vec3::{unit_vector, Point3, Vec3}};
-use crate::material::Material;
 #[derive(Default)]
 pub struct Camera {
 	pub aspect_ratio: f64,
@@ -65,7 +64,7 @@ impl Camera {
 			return Color::default();
 		}
 		let mut rec = HitRecord::default();
-		if world.hit(r, Interval::from(0.001, INFINITY), &mut rec) {
+		if world.hit(r, Interval::new(0.001, INFINITY), &mut rec) {
 			let mut scattered = Ray::default();
 			let mut attenuation = Color::default();
 			if rec.mat.scatter(r, &rec, &mut attenuation, &mut scattered) {

@@ -5,7 +5,7 @@ pub trait Material {
 }
 pub struct DefaultMaterial;
 impl Material for DefaultMaterial {
-	fn scatter(&self, r_in: &Ray, rec: &HitRecord, attenuation: &mut Color, scattered: &mut Ray) -> bool {
+	fn scatter(&self, _: &Ray, _: &HitRecord, _: &mut Color, _: &mut Ray) -> bool {
 		false
 	}
 }

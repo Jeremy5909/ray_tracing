@@ -1,10 +1,10 @@
-use crate::{interval::Interval, material::Material, ray::Ray, vec3::{dot, Point3, Vec3}};
+use crate::{interval::Interval, material::EMaterial, ray::Ray, vec3::{dot, Point3, Vec3}};
 
 #[derive(Clone, Default)]
 pub struct HitRecord {
 	pub p: Point3,
 	pub normal: Vec3,
-	pub mat: Box<dyn Material>,
+	pub mat: Box<EMaterial>,
 	pub t: f64,
 	pub front_face: bool,
 }

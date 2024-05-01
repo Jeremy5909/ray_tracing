@@ -20,8 +20,8 @@ impl Hittable for HittableList {
 		for object in &self.objects {
 			if object.hit(r, Interval::from(ray_t.min, closest_so_far), &mut temp_rec) {
 				hit_anything = true;
-				closest_so_far = temp_rec.t;
-				*rec = temp_rec;
+				closest_so_far = temp_rec.clone().t;
+				*rec = temp_rec.clone();
 			}
 		}
 		hit_anything

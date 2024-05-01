@@ -2,8 +2,8 @@ use std::{f64::INFINITY, io::stdout};
 
 use rand::{thread_rng, Rng};
 
-use crate::{color::{write_color, Color}, hittable::{HitRecord, Hittable}, interval::Interval, ray::Ray, vec3::{random_unit_vector, unit_vector, Point3, Vec3}};
-
+use crate::{color::{write_color, Color}, hittable::{HitRecord, Hittable}, interval::Interval, ray::Ray, vec3::{unit_vector, Point3, Vec3}};
+use crate::material::Material;
 #[derive(Default)]
 pub struct Camera {
 	pub aspect_ratio: f64,

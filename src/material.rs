@@ -1,27 +1,15 @@
 use crate::{color::Color, hittable::HitRecord, ray::Ray, vec3::{random_unit_vector, reflect}};
 
-#[derive(Clone, Copy, Default)]
-pub enum EMaterial {
-	Lambertian(Lambertian),
-	Metal(Metal),
-	#[default]
-	DefaultMaterial
-}
-
-impl Material for EMaterial {
-    fn scatter(&self, r_in: &Ray, rec: &HitRecord, attenuation: &mut Color, scattered: &mut Ray) -> bool {
-        match self {
-            EMaterial::Lambertian(mat) => mat.scatter(r_in, rec, attenuation, scattered),
-            EMaterial::Metal(mat) => mat.scatter(r_in, rec, attenuation, scattered),
-            EMaterial::DefaultMaterial => false,
-			// Implement scatter method for other variants
-        }
-    }
-}
 pub trait Material {
 	fn scatter(&self, r_in: &Ray, rec: &HitRecord, attenuation: &mut Color, scattered: &mut Ray) -> bool;
 }
-#[derive(Default, Clone, Copy)]
+pub struct DefaultMaterial;
+impl Material for DefaultMaterial {
+	fn scatter(&self, r_in: &Ray, rec: &HitRecord, attenuation: &mut Color, scattered: &mut Ray) -> bool {
+		false
+	}
+}
+
 pub struct Lambertian { pub albedo: Color }
 impl Material for Lambertian {
 	fn scatter(&self, _r_in: &Ray, rec: &HitRecord, attenuation: &mut Color, scattered: &mut Ray) -> bool {
@@ -38,7 +26,6 @@ impl Material for Lambertian {
 	}
 }
 
-#[derive(Default, Clone, Copy)]
 pub struct Metal { pub albedo: Color }
 impl Material for Metal {
 	fn scatter(&self, r_in: &Ray, rec: &HitRecord, attenuation: &mut Color, scattered: &mut Ray) -> bool {

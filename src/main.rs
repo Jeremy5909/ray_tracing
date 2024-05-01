@@ -43,6 +43,8 @@ fn main() {
     cam.look_at = Point3::new(0.0, 0.0, -1.0);
     cam.vup = Vec3::new(0.0, 1.0, 0.0);
     cam.fov = 20.0;
+    cam.defocus_angle = 10.0;
+    cam.focus_dist = 3.4;
 
     cam.render(&world);
 }

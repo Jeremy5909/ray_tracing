@@ -1,4 +1,4 @@
-use std::{cmp::min, fmt::Display, ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, RangeBounds, Sub}};
+use std::{fmt::Display, ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg, RangeBounds, Sub}};
 use rand::{distributions::uniform::SampleRange, random, thread_rng, Rng};
 
 #[derive(Clone, Copy, Default)]

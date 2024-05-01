@@ -1,12 +1,10 @@
 use crate::{hittable::{HitRecord, Hittable}, interval::Interval};
 
+#[derive(Default)]
 pub struct HittableList<'a> {
 	objects: Vec<&'a dyn Hittable<'a>>,
 }
 impl<'a> HittableList<'a> {
-	pub fn new() -> Self {
-		HittableList{objects: Vec::new()}
-	}
 	pub fn add(&mut self, object: &'a dyn Hittable<'a>) {
 		self.objects.push(object);
 	}

@@ -28,6 +28,8 @@ impl Vec3 {
 	}
 }
 pub type Point3 = Vec3;
+
+// Operator Overloading
 impl Neg for Vec3 {
 	type Output = Vec3;
 
@@ -122,6 +124,8 @@ impl DivAssign<f64> for Vec3 {
 		*self *= 1.0/rhs
 	}
 }
+
+
 impl Display for Vec3 {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		write!(f, "{} {} {}", self.e[0], self.e[1], self.e[2])

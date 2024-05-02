@@ -29,7 +29,6 @@ fn main() {
             let choose_mat: f64 = random();
             let center = Point3::new(a as f64 + 0.9*random::<f64>(), 0.2, b as f64+ 0.9*random::<f64>());
 
-            //?
             if (center - Point3::new(4.0, 0.2, 0.0)).length() > 0.9 {
                 if choose_mat < 0.8 {
                     let albedo = Color::random() * Color::random();
@@ -59,8 +58,8 @@ fn main() {
 
     
     let mut cam = Camera::new(16.0/9.0, 300);
-    cam.samples_per_pixel = 100;
-    cam.max_depth = 20;
+    cam.samples_per_pixel = 40;
+    cam.max_depth = 10;
     cam.look_from = Point3::new(13.0, 2.0, 3.0);
     cam.look_at = Point3::new(0.0, 0.0, 0.0);
     cam.fov = 20.0;

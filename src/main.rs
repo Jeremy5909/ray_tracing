@@ -4,7 +4,6 @@ use camera::Camera;
 use color::Color;
 use material::{Dielectric, Lambertian, Metal};
 use rand::{random, thread_rng, Rng};
-use vec3::Vec3;
 
 use crate::{hittable_list::HittableList, sphere::Sphere, vec3::Point3};
 
@@ -57,12 +56,11 @@ fn main() {
 
 
     
-    let mut cam = Camera::new(16.0/9.0, 1200);
-    cam.samples_per_pixel = 500;
+    let mut cam = Camera::new(16.0/9.0, 400);
+    cam.samples_per_pixel = 100;
     cam.max_depth = 50;
     cam.look_from = Point3::new(13.0, 2.0, 3.0);
     cam.look_at = Point3::new(0.0, 0.0, 0.0);
-    cam.vup = Vec3::new(0.0, 1.0, 0.0);
     cam.fov = 20.0;
     cam.defocus_angle = 0.6;
     cam.focus_dist = 10.0;

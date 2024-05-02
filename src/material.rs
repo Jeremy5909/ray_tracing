@@ -14,7 +14,7 @@ impl Material for DefaultMaterial {
 
 pub struct Lambertian { pub albedo: Color }
 impl Material for Lambertian {
-	fn scatter(&self, _r_in: &Ray, rec: &HitRecord, attenuation: &mut Color, scattered: &mut Ray) -> bool {
+	fn scatter(&self, r_in: &Ray, rec: &HitRecord, attenuation: &mut Color, scattered: &mut Ray) -> bool {
 		let mut scatter_dir = rec.normal + random_unit_vector();
 
 		// Catch degenerate scatter direction
@@ -22,7 +22,7 @@ impl Material for Lambertian {
 			scatter_dir = rec.normal
 		}
 
-		*scattered = Ray::new(rec.p, scatter_dir);
+		*scattered = Ray::new(rec.p, scatter_dir, r_in.time());
 		*attenuation = self.albedo;
 		true
 	}
@@ -33,7 +33,7 @@ impl Material for Metal {
 	fn scatter(&self, r_in: &Ray, rec: &HitRecord, attenuation: &mut Color, scattered: &mut Ray) -> bool {
 		let reflected = reflect(r_in.dir(), &rec.normal);
 		let reflected = unit_vector(&reflected) + (self.fuzz * random_unit_vector());
-		*scattered = Ray::new(rec.p, reflected);
+		*scattered = Ray::new(rec.p, reflected, r_in.time());
 		*attenuation = self.albedo;
 		true
 	}
@@ -45,7 +45,6 @@ impl Dielectric {
 		let r0 = (1.0 - refraction_index) / (1.0 + refraction_index);
 		let r0 = r0 * r0;
 		r0 + (1.0-r0) * (1.0 - cosine).powi(5)
-
 	}
 }
 impl Material for Dielectric {
@@ -63,7 +62,7 @@ impl Material for Dielectric {
 			refract(&unit_dir, &rec.normal, ri)
 		};
 
-		*scattered = Ray::new(rec.p, direction);
+		*scattered = Ray::new(rec.p, direction, r_in.time());
 		true
 	}
 }

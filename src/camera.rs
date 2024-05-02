@@ -1,6 +1,6 @@
 use std::{f64::INFINITY, io::stdout};
 
-use rand::{thread_rng, Rng};
+use rand::{random, thread_rng, Rng};
 
 use crate::{color::{write_color, Color}, hittable::{HitRecord, Hittable}, interval::Interval, ray::Ray, vec3::{cross, random_in_unit_disk, unit_vector, Point3, Vec3}};
 #[derive(Default)]
@@ -117,7 +117,9 @@ impl Camera {
 			+ ((j as f64 + offset.y()) * self.pixel_delta_v);
 		let ray_origin = if self.defocus_angle <= 0.0 {self.center} else {self.defocus_disk_sample()};
 		let ray_direction = pixel_sample - ray_origin;
-		Ray::new(ray_origin, ray_direction)
+		let ray_time: f64 = random();
+
+		Ray::new(ray_origin, ray_direction, ray_time)
 	}
 	fn sample_square() -> Vec3 {
 		let mut rng = thread_rng();

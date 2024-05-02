@@ -1,3 +1,5 @@
+use std::rc::Rc;
+
 use camera::Camera;
 use color::Color;
 use material::{Dielectric, Lambertian, Metal};
@@ -24,17 +26,17 @@ fn main() {
     
     let mut world = HittableList::default();
 
-    let ground = Sphere::new(Point3::new(0.0, -100.5, -1.0), 100.0, &ground_mat);
-    let center = Sphere::new(Point3::new(0.0, 0.0, -1.2), 0.5, &center_mat);
-    let left = Sphere::new(Point3::new(-1.0, 0.0, -1.0), 0.5, &left_mat);
-    let bubble = Sphere::new(Point3::new(-1.0, 0.0, -1.0), 0.4, &bubble_mat);
-    let right = Sphere::new(Point3::new(1.0, 0.0, -1.0), 0.5, &right_mat);
+    let ground = Sphere::new(Point3::new(0.0, -100.5, -1.0), 100.0, Rc::new(ground_mat));
+    let center = Sphere::new(Point3::new(0.0, 0.0, -1.2), 0.5, Rc::new(center_mat));
+    let left = Sphere::new(Point3::new(-1.0, 0.0, -1.0), 0.5, Rc::new(left_mat));
+    let bubble = Sphere::new(Point3::new(-1.0, 0.0, -1.0), 0.4, Rc::new(bubble_mat));
+    let right = Sphere::new(Point3::new(1.0, 0.0, -1.0), 0.5, Rc::new(right_mat));
 
-    world.add(&ground);
-    world.add(&center);
-    world.add(&left);
-    world.add(&bubble);
-    world.add(&right);
+    world.add(Rc::new(ground));
+    world.add(Rc::new(center));
+    world.add(Rc::new(left));
+    world.add(Rc::new(bubble));
+    world.add(Rc::new(right));
 
     let mut cam = Camera::new(16.0/9.0, 400);
     cam.samples_per_pixel = 100;

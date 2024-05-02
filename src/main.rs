@@ -57,8 +57,8 @@ fn main() {
 
     
     let mut cam = Camera::new(16.0/9.0, 400);
-    cam.samples_per_pixel = 100;
-    cam.max_depth = 50;
+    cam.samples_per_pixel = 5;
+    cam.max_depth = 20;
     cam.look_from = Point3::new(13.0, 2.0, 3.0);
     cam.look_at = Point3::new(0.0, 0.0, 0.0);
     cam.fov = 20.0;

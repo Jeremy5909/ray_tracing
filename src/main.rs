@@ -17,6 +17,8 @@ mod hittable_list;
 pub mod interval;
 pub mod camera;
 pub mod material;
+// Axis aligned bounding box
+pub mod aabb;
 
 fn main() {
     let mut world = HittableList::default();

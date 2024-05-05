@@ -20,6 +20,10 @@ impl Interval {
 	pub fn clamp(&self, x: f64) -> f64 {
 		x.clamp(self.min, self.max)
 	}
+	pub fn expand(&self, delta: f64) -> Interval {
+		let padding = delta/2.0;
+		Interval::new(self.min - padding, self.max + padding)
+	}
 }
 impl Default for Interval {
 	fn default() -> Self {

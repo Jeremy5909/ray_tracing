@@ -1,7 +1,7 @@
 use crate::{interval::Interval, ray::Ray, vec3::Point3};
 
 #[derive(Default)]
-struct Aabb {
+pub struct Aabb {
 	pub x: Interval,
 	pub y: Interval,
 	pub z: Interval,

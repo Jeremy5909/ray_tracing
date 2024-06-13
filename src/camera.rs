@@ -1,4 +1,4 @@
-use std::{f64::INFINITY, io::stdout};
+use std::{f64::INFINITY, io::{self, stdout, BufWriter}};
 
 use rand::{random, thread_rng, Rng};
 
@@ -48,6 +48,7 @@ impl Camera {
 	}
 	pub fn render(&mut self, world: &dyn Hittable) {
 		self.initialize();
+        let mut writer = BufWriter::new(io::stdout());
 
 		println!("P3\n{} {}\n255", self.image_width, self.image_height);
     	for j in 0..=self.image_height {
@@ -58,7 +59,7 @@ impl Camera {
 					let r = self.get_ray(i, j);
 					pixel_color += Self::ray_color(&r, self.max_depth, world);
 				}
-            	write_color(&mut stdout(), self.pixel_samples_scale * pixel_color);
+            	write_color(&mut writer, self.pixel_samples_scale * pixel_color);
         }
     }
     eprintln!("\rDone.                 \n");
